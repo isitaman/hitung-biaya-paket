@@ -20,6 +20,13 @@
   >
     <h1 class="text-3xl font-semibold text-center mb-4">Kalkulator Biaya Packing Anggrek</h1>
 
+    <!-- Tombol Kembali -->
+    <a href="index.html" class="absolute left-6 top-6 text-[#7a6841] hover:text-[#a88f3a] transition" title="Kembali">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+
     <label for="jenis" class="font-medium text-lg">Jenis Packing</label>
     <select
       id="jenis"
@@ -168,16 +175,16 @@
       if (jenis === "kardus1kg" || jenis === "kardus2kg") {
         beratPaket = jumlah;
         const jasa = getJasaBorongan(jenis, beratPaket);
-        const hargaBox = jenis === "kardus1kg" ? 6000 : 7000;
+        const hargaBox = jenis === "kardus1kg" ? 4500 : 6500;
         const biayaPackingLain = getBiayaPackingLainnya(beratPaket);
+        const sumBiayaLain = jasa + biayaPackingLain;
 
         total = hargaBox + jasa + biayaPackingLain;
 
         deskripsi = `📦 Kardus Khusus ${jenis === "kardus1kg" ? "1kg" : "2kg"}\n\n` +
-                    `• Berat paket: ${beratPaket} kg\n` +
-                    `• Harga per box: Rp${hargaBox.toLocaleString("id-ID")}\n` +
-                    `• Biaya jasa borongan: Rp${jasa.toLocaleString("id-ID")}\n` +
-                    `• Biaya bahan packing lainnya: Rp${biayaPackingLain.toLocaleString("id-ID")}`;
+                    `• Berat paket : ${beratPaket} kg\n` +
+                    `• Harga per box : Rp${hargaBox.toLocaleString("id-ID")}\n` +
+                    `• Biaya packing lainnya : Rp${sumBiayaLain.toLocaleString("id-ID")}`;
       } else {
         const p = parseFloat(document.getElementById("panjang").value);
         const l = parseFloat(document.getElementById("lebar").value);
@@ -192,9 +199,12 @@
         const jasa = getJasaBorongan(jenis, volume);
         const lakban = 1000;
         const biayaPackingLain = getBiayaPackingLainnya(volume);
+        const sumBiayaLain = jasa + biayaPackingLain;
+
 
         if (jenis === "customKardus") {
-          total = bahan + jasa + lakban + biayaPackingLain;
+          total = bahan + jasa + biayaPackingLain;
+          
           deskripsi =
             "📦 Custom Kardus\n\n" +
             "📐 Dimensi & Berat Paket\n" +
@@ -206,9 +216,7 @@
             `• Biaya bahan kardus: Rp${bahan.toLocaleString("id-ID")}\n\n` +
 
             "🛠️ Biaya Lainnya\n" +
-            `• Biaya jasa borongan: Rp${jasa.toLocaleString("id-ID")}\n` +
-            `• Biaya lakban: Rp1.000\n` +
-            `• Biaya bahan packing lainnya: Rp${biayaPackingLain.toLocaleString("id-ID")}`;
+            `• Biaya packing lainnya: Rp${sumBiayaLain.toLocaleString("id-ID")}`;
         } else if (jenis === "customKayu") {
           let pembagi = t / 40;
           let jumlahRing = Math.floor(pembagi);
@@ -231,7 +239,7 @@
           const beratPakuKg = (totalPaku * 2) / 1000;
           const biayaPaku = totalPaku * 40;
 
-          total = biayaKayu + biayaPaku + bahan + jasa + lakban + biayaPackingLain;
+          total = biayaKayu + biayaPaku + bahan + jasa + biayaPackingLain;
 
           deskripsi =
             "📦 Custom Kayu dengan Lapisan Kardus\n\n" +
@@ -254,9 +262,7 @@
             `• Biaya bahan kardus: Rp${bahan.toLocaleString("id-ID")}\n\n` +
 
             "🛠️ Biaya Lainnya\n" +
-            `• Biaya jasa borongan: Rp${jasa.toLocaleString("id-ID")}\n` +
-            `• Biaya lakban: Rp1.000\n` +
-            `• Biaya bahan packing lainnya: Rp${biayaPackingLain.toLocaleString("id-ID")}`;
+            `• Biaya packing lainnya: Rp${sumBiayaLain.toLocaleString("id-ID")}`;
         }
       }
 

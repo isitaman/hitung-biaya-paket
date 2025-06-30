@@ -8,6 +8,13 @@
 </head>
 <body class="min-h-screen bg-[#f5f0e6] flex items-center justify-center text-[#5a3e1b]">
   <main class="w-[90vw] max-w-xl bg-[#fdf7ec] rounded-3xl shadow-lg p-8 md:p-12 flex flex-col gap-6">
+    <!-- Tombol Kembali -->
+    <a href="index.html" class="absolute left-6 top-6 text-[#7a6841] hover:text-[#a88f3a] transition" title="Kembali">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-7 md:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+
     <h1 class="text-2xl font-bold text-center">Kalkulator Saran Paket</h1>
 
     <label for="panjang" class="font-medium">Panjang (cm)</label>
@@ -47,6 +54,14 @@
       const l = parseFloat(document.getElementById("lebar").value);
       const t = parseFloat(document.getElementById("tinggi").value);
 
+      // Tambahan catatan saran kekuatan
+      let noteText = "";
+      if ((p < 23 || l < 23) && t <= 100) {
+        noteText = `<div class="text-sm text-red-600 mt-1">NB: Jika produk menggunakan <strong>pot gerabah</strong>, disarankan menggunakan <strong>Custom Kayu</strong> untuk keamanan.</div>`;
+      } else {
+        noteText = `<div class="text-sm text-red-600 mt-1">NB: Disarankan menggunakan <strong>Custom Kayu</strong> untuk kekuatan tambahan.</div>`;
+      }
+
       const hasil = document.getElementById("hasil");
       const deskripsi = document.getElementById("deskripsi");
 
@@ -58,7 +73,7 @@
         return;
       }
 
-      const vol = (p * l * t) / 6000;
+      const vol = (p * l * t) / 5000;
       const rekomendasi = [];
 
       const cocok1kg = p <= 10 && l <= 10 && t <= 85;
@@ -70,34 +85,34 @@
         const jasa = getJasaBorongan("kardus1kg", 1) + getBiayaPackingLainnya(1);
         rekomendasi.push({
           label: "Kardus Khusus 1kg",
-          biaya: 6000 + jasa,
-          detail: `• Harga kardus: Rp6.000\n• Jasa packing: Rp${jasa.toLocaleString("id-ID")}`
+          biaya: 4500 + jasa,
+          detail: `• Harga kardus : Rp6.000\n• Biaya Lainnya : Rp${jasa.toLocaleString("id-ID")}`
         });
       }
       if (cocok2kg) {
         const jasa = getJasaBorongan("kardus2kg", 2) + getBiayaPackingLainnya(2);
         rekomendasi.push({
           label: "Kardus Khusus 2kg",
-          biaya: 7000 + jasa,
-          detail: `• Harga kardus: Rp7.000\n• Jasa packing: Rp${jasa.toLocaleString("id-ID")}`
+          biaya: 6500 + jasa,
+          detail: `• Harga kardus : Rp7.000\n• Biaya Lainnya : Rp${jasa.toLocaleString("id-ID")}`
         });
       }
       if (cocokDobel1kg) {
-        const satuan = 6000 * 2;
+        const satuan = 4500 * 2;
         const jasa = getJasaBorongan("kardus1kg", 2) + getBiayaPackingLainnya(2);
         rekomendasi.push({
           label: "2 Kardus 1kg (dihubungkan)",
           biaya: satuan + jasa,
-          detail: `• 2 x Kardus 1kg = Rp${satuan.toLocaleString("id-ID")}\n• Jasa: Rp${jasa.toLocaleString("id-ID")}`
+          detail: `• 2 x Kardus 1kg : Rp${satuan.toLocaleString("id-ID")}\n• Biaya Lainnya : Rp${jasa.toLocaleString("id-ID")}`
         });
       }
       if (cocokDobel2kg) {
-        const satuan = 7000 * 2;
+        const satuan = 6500 * 2;
         const jasa = getJasaBorongan("kardus2kg", 4) + getBiayaPackingLainnya(4);
         rekomendasi.push({
           label: "2 Kardus 2kg (dihubungkan)",
           biaya: satuan + jasa,
-          detail: `• 2 x Kardus 2kg = Rp${satuan.toLocaleString("id-ID")}\n• Jasa: Rp${jasa.toLocaleString("id-ID")}`
+          detail: `• 2 x Kardus 2kg : Rp${satuan.toLocaleString("id-ID")}\n• Biaya Lainnya : Rp${jasa.toLocaleString("id-ID")}`
         });
       }
 
@@ -110,7 +125,7 @@
       rekomendasi.push({
         label: "Custom Kardus",
         biaya: totalKardus,
-        detail: `• Luas: ${luas.toFixed(2)} m²\n• Bahan kardus: Rp${bahanKardus.toLocaleString("id-ID")}\n• Jasa: Rp${jasaCustom.toLocaleString("id-ID")}`
+        detail: `• Luas : ${luas.toFixed(2)} m²\n• Bahan kardus : Rp${bahanKardus.toLocaleString("id-ID")}\n• Biaya Lainnya : Rp${jasaCustom.toLocaleString("id-ID")}`
       });
 
       // Custom Kayu
@@ -130,39 +145,43 @@
       rekomendasi.push({
         label: "Custom Kayu + Kardus",
         biaya: totalKayuBiaya,
-        detail: `• Kayu: Rp${biayaKayu.toLocaleString("id-ID")}\n• Paku: Rp${biayaPaku.toLocaleString("id-ID")}\n• Kardus pelapis: Rp${bahanKardus.toLocaleString("id-ID")}\n• Jasa: Rp${jasaKayu.toLocaleString("id-ID")}`
+        detail: `• Kayu : Rp${biayaKayu.toLocaleString("id-ID")}\n• Paku : Rp${biayaPaku.toLocaleString("id-ID")}\n• Kardus pelapis : Rp${bahanKardus.toLocaleString("id-ID")}\n• Biaya Lainnya : Rp${jasaKayu.toLocaleString("id-ID")}`
       });
+
+      // Filter rekomendasi jika dimensi besar
+      const isDimensiBesar = (p >= 23 || l >= 23) && t >= 100;
+      let finalRekomendasi = rekomendasi;
+
+      if (isDimensiBesar) {
+        finalRekomendasi = rekomendasi.filter(r => r.label.includes("Custom Kayu"));
+      }
 
       rekomendasi.sort((a, b) => a.biaya - b.biaya);
 
-      hasil.textContent = `Saran Terbaik: ${rekomendasi[0].label}`;
-      deskripsi.innerHTML = `Dimensi: ${p} x ${l} x ${t} cm<br>Volume: ${vol.toFixed(2)} kg<br><br>${rekomendasi.map(r => `🔹 ${r.label}<br>${r.detail.replace(/\n/g, '<br>')}<br><strong>Perkiraan Biaya: Rp${r.biaya.toLocaleString("id-ID")}</strong><br>`).join("<br>")}`;
+      hasil.innerHTML = `<div>Saran Terbaik: <strong>${finalRekomendasi[0].label}</strong></div>${noteText}`;
+      deskripsi.innerHTML = `Dimensi : ${p} x ${l} x ${t} cm<br>Volume : ${vol.toFixed(2)} kg<br><br>${rekomendasi.map(r => `🔹 ${r.label}<br>${r.detail.replace(/\n/g, '<br>')}<br><strong>Perkiraan Biaya : Rp${r.biaya.toLocaleString("id-ID")}</strong><br>`).join("<br>")}`;
     }
 
     function getJasaBorongan(jenis, beratKg) {
       if (jenis === "kardus1kg" || jenis === "kardus2kg") jenis = "kardus";
       const data = [
-        { max: 3, kardus: 1000, customKardus: 1000, customKayu: 1000 },
-        { max: 6, kardus: 2000, customKardus: 2000, customKayu: 2000 },
-        { max: 10, kardus: 3000, customKardus: 3000, customKayu: 3000 },
-        { max: 15, kardus: 5000, customKardus: 5000, customKayu: 5000 },
-        { max: 20, kardus: 6000, customKardus: 6000, customKayu: 6000 },
-        { max: 25, kardus: 7000, customKardus: 7000, customKayu: 7000 },
-        { max: 30, kardus: 8000, customKardus: 8000, customKayu: 8000 },
-        { max: 35, kardus: 9000, customKardus: 9000, customKayu: 9000 },
-        { max: 40, kardus: 10000, customKardus: 10000, customKayu: 10000 },
-        { max: 45, kardus: 11000, customKardus: 11000, customKayu: 11000 },
-        { max: 50, kardus: 12000, customKardus: 12000, customKayu: 12000 },
-        { max: 55, kardus: 13000, customKardus: 13000, customKayu: 13000 },
-        { max: 60, kardus: 14000, customKardus: 14000, customKayu: 14000 },
-        { max: 65, kardus: 15000, customKardus: 15000, customKayu: 15000 },
-        { max: 70, kardus: 16000, customKardus: 16000, customKayu: 16000 },
-        { max: 75, kardus: 17000, customKardus: 17000, customKayu: 17000 },
-        { max: 80, kardus: 18000, customKardus: 18000, customKayu: 18000 },
-        { max: 85, kardus: 19000, customKardus: 19000, customKayu: 19000 },
-        { max: 90, kardus: 20000, customKardus: 20000, customKayu: 20000 },
-        { max: 95, kardus: 21000, customKardus: 21000, customKayu: 21000 },
-        { max: 100, kardus: 22000, customKardus: 22000, customKayu: 22000 },
+      { max: 4, kardus: 2000, customKardus: 3500, customKayu: 4000 },
+        { max: 10, kardus: 3000, customKardus: 4500, customKayu: 6000 },
+        { max: 20, kardus: 4000, customKardus: 5500, customKayu: 8000 },
+        { max: 30, kardus: 5000, customKardus: 6500, customKayu: 10000 },
+        { max: 40, kardus: 6000, customKardus: 7500, customKayu: 12000 },
+        { max: 50, kardus: 7000, customKardus: 8500, customKayu: 14000 },
+        { max: 60, kardus: 8000, customKardus: 9500, customKayu: 16000 },
+        { max: 70, kardus: 9000, customKardus: 10500, customKayu: 18000 },
+        { max: 80, kardus: 10000, customKardus: 11500, customKayu: 20000 },
+        { max: 90, kardus: 11000, customKardus: 12500, customKayu: 22000 },
+        { max: 100, kardus: 12000, customKardus: 13500, customKayu: 24000 },
+        { max: 110, kardus: 13000, customKardus: 14500, customKayu: 26000 },
+        { max: 120, kardus: 14000, customKardus: 15500, customKayu: 28000 },
+        { max: 130, kardus: 15000, customKardus: 16500, customKayu: 30000 },
+        { max: 140, kardus: 16000, customKardus: 17500, customKayu: 32000 },
+        { max: 150, kardus: 17000, customKardus: 18500, customKayu: 34000 },
+        { max: 160, kardus: 18000, customKardus: 19500, customKayu: 36000 },
       ];
       for (const entry of data) {
         if (beratKg <= entry.max) return entry[jenis];

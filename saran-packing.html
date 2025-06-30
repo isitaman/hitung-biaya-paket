@@ -16,7 +16,7 @@
     <label for="lebar" class="font-medium">Lebar (cm)</label>
     <input type="number" id="lebar" class="rounded-xl border border-[#c9b89a] bg-[#f9f5e7] px-4 py-3" />
 
-    <label for="tinggi" class="font-medium">Tinggi (cm)</label>
+    <label for="tinggi" class="font-medium">Tinggi (cm) (Ukuran Terpanjang)</label>
     <input type="number" id="tinggi" class="rounded-xl border border-[#c9b89a] bg-[#f9f5e7] px-4 py-3" />
 
     <button onclick="saranPaket()" class="bg-[#bfa46f] hover:bg-[#a88f3a] text-white font-semibold rounded-xl py-3">Cek Saran Paket</button>
@@ -47,9 +47,9 @@
       const rekomendasi = [];
 
       const cocok1kg = p <= 10 && l <= 10 && t <= 85;
-      const cocok2kg = p <= 15 && l <= 15 && t <= 95;
+      const cocok2kg = p <= 17 && l <= 17 && t <= 95;
       const cocokDobel1kg = p <= 10 && l <= 10 && t <= 120;
-      const cocokDobel2kg = p <= 15 && l <= 15 && t <= 120;
+      const cocokDobel2kg = p <= 21 && l <= 21 && t <= 120;
 
       if (cocok1kg) {
         const jasa = getJasaBorongan("kardus1kg", 1);
@@ -68,19 +68,21 @@
         });
       }
       if (cocokDobel1kg) {
-        const satuan = 6000 + getJasaBorongan("kardus1kg", 1);
+        const satuan = 6000 * 2;
+        const jasa = getJasaBorongan("kardus1kg", 1);
         rekomendasi.push({
           label: "2 Kardus 1kg (dihubungkan)",
-          biaya: satuan * 2,
-          detail: `• 2 x Kardus 1kg + jasa = Rp${satuan.toLocaleString("id-ID")}`
+          biaya: satuan + jasa,
+          detail: `• 2 x Kardus 1kg = Rp${satuan.toLocaleString("id-ID")} \n • jasa = Rp${jasa.toLocaleString("id-ID")}`
         });
       }
       if (cocokDobel2kg) {
-        const satuan = 7000 + getJasaBorongan("kardus2kg", 2);
+        const satuan = 7000 * 2;
+        const jasa = getJasaBorongan("kardus2kg", 2)
         rekomendasi.push({
           label: "2 Kardus 2kg (dihubungkan)",
-          biaya: satuan * 2,
-          detail: `• 2 x Kardus 2kg + jasa = Rp${satuan.toLocaleString("id-ID")}`
+          biaya: satuan + jasa,
+          detail: `• 2 x Kardus 2kg = Rp${satuan.toLocaleString("id-ID")} \n • jasa = Rp${jasa.toLocaleString("id-ID")}`
         });
       }
 

@@ -73,7 +73,7 @@
         rekomendasi.push({
           label: "2 Kardus 1kg (dihubungkan)",
           biaya: satuan + jasa,
-          detail: `• 2 x Kardus 1kg = Rp${satuan.toLocaleString("id-ID")} \n • jasa = Rp${jasa.toLocaleString("id-ID")}`
+          detail: `• 2 x Kardus 1kg = Rp${satuan.toLocaleString("id-ID")} \n• jasa = Rp${jasa.toLocaleString("id-ID")}`
         });
       }
       if (cocokDobel2kg) {
@@ -121,7 +121,14 @@
       rekomendasi.sort((a, b) => a.biaya - b.biaya);
 
       hasil.textContent = `Saran Terbaik: ${rekomendasi[0].label}`;
-      deskripsi.textContent = `Dimensi: ${p} x ${l} x ${t} cm\nVolume: ${vol.toFixed(2)} kg\n\n${rekomendasi.map(r => `🔹 ${r.label}\n${r.detail}\nPerkiraan Biaya: Rp${r.biaya.toLocaleString("id-ID")}\n`).join("\n")}`;
+      deskripsi.innerHTML = `
+        Dimensi: ${p} x ${l} x ${t} cm<br>
+        Volume: ${vol.toFixed(2)} kg<br><br>
+        ${rekomendasi.map(r => 
+          `🔹 ${r.label}<br>${r.detail.replace(/\n/g, '<br>')}<br><strong>Perkiraan Biaya: Rp${r.biaya.toLocaleString("id-ID")}</strong><br>`
+        ).join("<br>")}
+      `;
+
     }
 
     function getJasaBorongan(jenis, beratKg) {

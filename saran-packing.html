@@ -121,11 +121,7 @@
       rekomendasi.sort((a, b) => a.biaya - b.biaya);
 
       hasil.textContent = `Saran Terbaik: ${rekomendasi[0].label}`;
-      deskripsi.innerHTML = `
-        Dimensi: ${p} x ${l} x ${t} cm<br>
-        Volume: ${vol.toFixed(2)} kg<br><br>
-        ${rekomendasi.map(r => 
-          `🔹 ${r.label}<br>${r.detail.replace(/\n/g, '<br>')}<br><strong>Perkiraan Biaya: Rp${r.biaya.toLocaleString("id-ID")}</strong><br>`
+      deskripsi.innerHTML = `Dimensi: ${p} x ${l} x ${t} cm<br>Volume: ${vol.toFixed(2)} kg<br><br>${rekomendasi.map(r => `🔹 ${r.label}<br>${r.detail.replace(/\n/g, '<br>')}<br><strong>Perkiraan Biaya: Rp${r.biaya.toLocaleString("id-ID")}</strong><br>`
         ).join("<br>")}
       `;
 

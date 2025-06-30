@@ -27,6 +27,21 @@
   </main>
 
   <script>
+    function getBiayaPackingLainnya(kg) {
+      const batasMaks = 100;
+      const biayaMaks = 10000;
+
+      if (kg <= 3) return 1000;
+      if (kg <= 6) return 2000;
+      if (kg <= 10) return 3000;
+      if (kg <= 15) return 5000;
+      if (kg <= 20) return 6000;
+
+      let tambahan = Math.ceil((kg - 20) / 5);
+      let total = 6000 + tambahan * 1000;
+      return Math.min(total, biayaMaks);
+    }
+
     function saranPaket() {
       const p = parseFloat(document.getElementById("panjang").value);
       const l = parseFloat(document.getElementById("lebar").value);
@@ -36,7 +51,7 @@
       const deskripsi = document.getElementById("deskripsi");
 
       hasil.textContent = "";
-      deskripsi.textContent = "";
+      deskripsi.innerHTML = "";
 
       if (!p || !l || !t) {
         hasil.textContent = "Mohon lengkapi semua dimensi.";
@@ -52,7 +67,7 @@
       const cocokDobel2kg = p <= 21 && l <= 21 && t <= 120;
 
       if (cocok1kg) {
-        const jasa = getJasaBorongan("kardus1kg", 1);
+        const jasa = getJasaBorongan("kardus1kg", 1) + getBiayaPackingLainnya(1);
         rekomendasi.push({
           label: "Kardus Khusus 1kg",
           biaya: 6000 + jasa,
@@ -60,7 +75,7 @@
         });
       }
       if (cocok2kg) {
-        const jasa = getJasaBorongan("kardus2kg", 2);
+        const jasa = getJasaBorongan("kardus2kg", 2) + getBiayaPackingLainnya(2);
         rekomendasi.push({
           label: "Kardus Khusus 2kg",
           biaya: 7000 + jasa,
@@ -69,20 +84,20 @@
       }
       if (cocokDobel1kg) {
         const satuan = 6000 * 2;
-        const jasa = getJasaBorongan("kardus1kg", 1);
+        const jasa = getJasaBorongan("kardus1kg", 2) + getBiayaPackingLainnya(2);
         rekomendasi.push({
           label: "2 Kardus 1kg (dihubungkan)",
           biaya: satuan + jasa,
-          detail: `• 2 x Kardus 1kg = Rp${satuan.toLocaleString("id-ID")} \n• jasa = Rp${jasa.toLocaleString("id-ID")}`
+          detail: `• 2 x Kardus 1kg = Rp${satuan.toLocaleString("id-ID")}\n• Jasa: Rp${jasa.toLocaleString("id-ID")}`
         });
       }
       if (cocokDobel2kg) {
         const satuan = 7000 * 2;
-        const jasa = getJasaBorongan("kardus2kg", 2)
+        const jasa = getJasaBorongan("kardus2kg", 4) + getBiayaPackingLainnya(4);
         rekomendasi.push({
           label: "2 Kardus 2kg (dihubungkan)",
           biaya: satuan + jasa,
-          detail: `• 2 x Kardus 2kg = Rp${satuan.toLocaleString("id-ID")} \n • jasa = Rp${jasa.toLocaleString("id-ID")}`
+          detail: `• 2 x Kardus 2kg = Rp${satuan.toLocaleString("id-ID")}\n• Jasa: Rp${jasa.toLocaleString("id-ID")}`
         });
       }
 
@@ -90,13 +105,12 @@
       const luas = 2 * ((p / 100) * (l / 100) + (p / 100) * (t / 100) + (l / 100) * (t / 100));
       const beratKardus = luas * 0.5;
       const bahanKardus = beratKardus * 10000;
-      const lakban = 1000;
-      const jasaCustom = getJasaBorongan("customKardus", vol);
-      const totalKardus = bahanKardus + jasaCustom + lakban;
+      const jasaCustom = getJasaBorongan("customKardus", vol) + getBiayaPackingLainnya(vol);
+      const totalKardus = bahanKardus + jasaCustom;
       rekomendasi.push({
         label: "Custom Kardus",
         biaya: totalKardus,
-        detail: `• Luas: ${luas.toFixed(2)} m²\n• Bahan kardus: Rp${bahanKardus.toLocaleString("id-ID")}\n• Jasa: Rp${jasaCustom.toLocaleString("id-ID")}\n• Lakban: Rp1.000`
+        detail: `• Luas: ${luas.toFixed(2)} m²\n• Bahan kardus: Rp${bahanKardus.toLocaleString("id-ID")}\n• Jasa: Rp${jasaCustom.toLocaleString("id-ID")}`
       });
 
       // Custom Kayu
@@ -111,20 +125,18 @@
       const biayaKayu = totalKayu * 1500;
       const totalPaku = 4 * 4 * 2 + jumlahRing * 4 * 2;
       const biayaPaku = totalPaku * 40;
-      const totalKayuBiaya = biayaKayu + biayaPaku + bahanKardus + jasaCustom + lakban;
+      const jasaKayu = getJasaBorongan("customKayu", vol) + getBiayaPackingLainnya(vol);
+      const totalKayuBiaya = biayaKayu + biayaPaku + bahanKardus + jasaKayu;
       rekomendasi.push({
         label: "Custom Kayu + Kardus",
         biaya: totalKayuBiaya,
-        detail: `• Kayu: Rp${biayaKayu.toLocaleString("id-ID")}\n• Paku: Rp${biayaPaku.toLocaleString("id-ID")}\n• Kardus pelapis: Rp${bahanKardus.toLocaleString("id-ID")}\n• Jasa: Rp${jasaCustom.toLocaleString("id-ID")}\n• Lakban: Rp1.000`
+        detail: `• Kayu: Rp${biayaKayu.toLocaleString("id-ID")}\n• Paku: Rp${biayaPaku.toLocaleString("id-ID")}\n• Kardus pelapis: Rp${bahanKardus.toLocaleString("id-ID")}\n• Jasa: Rp${jasaKayu.toLocaleString("id-ID")}`
       });
 
       rekomendasi.sort((a, b) => a.biaya - b.biaya);
 
       hasil.textContent = `Saran Terbaik: ${rekomendasi[0].label}`;
-      deskripsi.innerHTML = `Dimensi: ${p} x ${l} x ${t} cm<br>Volume: ${vol.toFixed(2)} kg<br><br>${rekomendasi.map(r => `🔹 ${r.label}<br>${r.detail.replace(/\n/g, '<br>')}<br><strong>Perkiraan Biaya: Rp${r.biaya.toLocaleString("id-ID")}</strong><br>`
-        ).join("<br>")}
-      `;
-
+      deskripsi.innerHTML = `Dimensi: ${p} x ${l} x ${t} cm<br>Volume: ${vol.toFixed(2)} kg<br><br>${rekomendasi.map(r => `🔹 ${r.label}<br>${r.detail.replace(/\n/g, '<br>')}<br><strong>Perkiraan Biaya: Rp${r.biaya.toLocaleString("id-ID")}</strong><br>`).join("<br>")}`;
     }
 
     function getJasaBorongan(jenis, beratKg) {

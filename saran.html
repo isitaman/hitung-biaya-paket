@@ -2,60 +2,108 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Form Kritik dan Saran</title>
+  <title>Form Kritik & Saran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f2f2f2; }
-    form { background: white; padding: 1.5rem; border-radius: 8px; max-width: 500px; margin: auto; }
-    label { display: block; margin-top: 1rem; font-weight: bold; }
-    input, textarea { width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid #ccc; }
-    button { margin-top: 1rem; padding: 0.6rem 1.2rem; background: #4caf50; color: white; border: none; border-radius: 4px; }
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+    h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 1.5rem;
+      background: #4caf50;
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 4px;
+      width: 100%;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <form id="kritikForm">
-    <h2>Form Kritik dan Saran</h2>
-    <label>Nama:</label>
+  <form id="formKritik">
+    <h2>Kritik & Saran</h2>
+
+    <label>Nama</label>
     <input type="text" name="nama" required>
 
-    <label>Departement:</label>
+    <label>Departement</label>
     <input type="text" name="departement" required>
 
-    <label>Kritik:</label>
+    <label>Kritik</label>
     <textarea name="kritik" rows="3" required></textarea>
 
-    <label>Saran:</label>
+    <label>Saran</label>
     <textarea name="saran" rows="3" required></textarea>
 
     <button type="submit">Kirim</button>
-    <p id="status" style="color: green; margin-top: 1rem;"></p>
+    <div id="status"></div>
   </form>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzrAhh4VLpGTr7Ny4KUn9wWEX8MPZumglJGBCQl2JeT3daf6oJpFOzVIXCWSoByJLAcpA/exec'; // Ganti dengan URL Web App kamu
-    const form = document.getElementById('kritikForm');
+    const scriptURL = 'PASTE_WEB_APP_URL_KAMU_DI_SINI';
+    const form = document.getElementById('formKritik');
     const status = document.getElementById('status');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
+
       const formData = new FormData(form);
       const data = {};
-      formData.forEach((val, key) => data[key] = val);
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
 
       fetch(scriptURL, {
         method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(res => res.json())
-        .then(response => {
-          status.textContent = 'Terima kasih! Data berhasil dikirim.';
-          form.reset();
-        })
-        .catch(err => {
-          status.textContent = 'Gagal mengirim data.';
-          status.style.color = 'red';
-        });
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        status.style.color = "green";
+        status.textContent = "Terima kasih! Data berhasil dikirim.";
+        form.reset();
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        status.style.color = "red";
+        status.textContent = "Terjadi kesalahan saat mengirim data.";
+      });
     });
   </script>
 </body>
